@@ -36,32 +36,11 @@ You can then deploy the example template included in this module: [Example Templ
 After you do, verify the slot exists in the [Amazon Lex Console Intent view](https://console.aws.amazon.com/lex/home?region=us-east-1#intents:)!
 
 
-## Usage {TODO}
+## Usage
 
-  See [`./example.template.json`](./example.template.json) for a sample CloudFormation template. The example uses `Condition` statements, `Parameters`, and dynamic `ServiceToken` ingestion using `Fn::ImportValue` fully.
+  See [`./example.template.json`](./example.template.json) for a sample CloudFormation template. The example uses `Parameters` and dynamic `ServiceToken` ingestion using `Fn::ImportValue` fully.
 
-    "ResourceLogicalIdInResourcesObject": {
-      "Type": "Type": "Custom::LexIntent",
-      "Properties": {
-        "ServiceToken": "arn:aws:lambda:<cfn-region-id>:<your-account-id>:function:<this-deployed-lambda-name>",
-
-        "name": "MyIntentName", /* REQUIRED, name of the Lex Intent.
-                                     Updates cause replacement. */
-        "checksum": "<uuid checksum>", /* Checksum of version to update.
-                                          Include this to force failure
-                                          if the checksums do not match.*/
-        "description": "Any text", /* Arbitrary description. Max 200 chars. */
-        "enumerationValues": [ /* REQUIRED. Enumerated values for Intent */
-          {
-            "value": "hello"
-          },
-          .........
-          {
-            "value": "world"
-          }
-        ]
-      }
-    }
+  The `Properties` exactly follow the API endpoint parameter structure the nodejs SDK uses. The method can be found in [the AWS docs here](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/LexModelBuildingService.html#putIntent-property)
 
 
 #### Miscellaneous
