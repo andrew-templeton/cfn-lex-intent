@@ -20,13 +20,13 @@ This Lambda makes use of the Lambda-Backed CloudFormation Custom Resource flow m
 
 This package uses `cfn-lambda` ([GitHub](https://github.com/andrew-templeton/cfn-lambda) / [NPM](https://www.npmjs.com/package/cfn-lambda)) Launcher Pages, so you can install this in your AWS Account without downloading anything! Just visit my (the maintainer) Launch Page and click Launch on the `us-east-1` region. It only supports installation in the `us-east-1` region right now, since that's the only AWS region Amazon Lex is supported in right now.
 
-[Maintainer's Launcher Page](https://s3.amazonaws.com/cfn-lex-intent-006297545748-us-east-1/1-0-1.html)
+[Maintainer's Launcher Page](https://s3.amazonaws.com/cfn-lex-intent-006297545748-us-east-1/1-0-3.html)
 
 After using this Launch Page, your CloudFormation templates will have access to `Custom::LexIntent` resources as long as you add `ServiceToken` to the `Properties` for the resource and use it like in the example template. The `ServiceToken` is available to you in the `Outputs` of the CloudFormation Stack the Launch Page link creates.
 
 Furthermore, you can simply `Fn::ImportValue` the installed `ServiceToken` Lambda ARN using:
 
-      "Fn::ImportValue": "cfn-lex-intent-1-0-1-ServiceToken"
+      "Fn::ImportValue": "cfn-lex-intent-1-0-3-ServiceToken"
 
 
 If you clone this repo and run `npm run deploy`, it will do the same thing / install the same way that clicking on the Launch link will.

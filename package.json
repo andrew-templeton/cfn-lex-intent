@@ -1,6 +1,6 @@
 {
   "name": "cfn-lex-intent",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "AWS CloudFormation Custom Lambda Resource | AWS Lex Intent",
   "main": "index.js",
   "scripts": {

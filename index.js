@@ -63,11 +63,12 @@ const Update = function (RequestPhysicalID, CfnRequestParams, OldCfnRequestParam
 
 // Delete can simply be run with the name passed in.
 // Ignore 404's if it's already gone.
+// 409's sometimes thrown if it's a recent deletion.
 const Delete = CfnLambda.SDKAlias({
   api: LexModelBuildingService,
   method: 'deleteIntent',
   keys: ['name'],
-  ignoreErrorCodes: [404]
+  ignoreErrorCodes: [404, 409]
 })
 
 // When there's an explicit DependsOn resource altered, but no change on this

@@ -1,6 +1,6 @@
 {
   "name": "cfn-lex-intent",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "dependencies": {
     "cfn-lambda": {
       "version": "2.1.1",

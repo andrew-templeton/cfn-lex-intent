@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Also uses Custom::LexSlotType sample template version 1.0.1 as an external reference, to supply the slots for the Intent.",
+  "Description": "Also uses Custom::LexSlotType sample template version 1.0.3 as an external reference, to supply the slots for the Intent.",
   "Parameters": {
     "IntentName": {
       "Type": "String",
@@ -23,7 +23,7 @@
       "Type": "Custom::LexSlotType",
       "Properties": {
         "ServiceToken": {
-          "Fn::ImportValue": "cfn-lex-slot-type-1-0-1-ServiceToken"
+          "Fn::ImportValue": "cfn-lex-slot-type-1-0-3-ServiceToken"
         },
         "name": "PizzaSauceType",
         "description": "Pizza sauce type slot (normal vs white pie)",
@@ -41,7 +41,7 @@
       "Type": "Custom::LexSlotType",
       "Properties": {
         "ServiceToken": {
-          "Fn::ImportValue": "cfn-lex-slot-type-1-0-1-ServiceToken"
+          "Fn::ImportValue": "cfn-lex-slot-type-1-0-3-ServiceToken"
         },
         "name": "PizzaCrustType",
         "description": "Pizza crust type slot.",
@@ -61,7 +61,7 @@
       "Type": "Custom::LexSlotType",
       "Properties": {
         "ServiceToken": {
-          "Fn::ImportValue": "cfn-lex-slot-type-1-0-1-ServiceToken"
+          "Fn::ImportValue": "cfn-lex-slot-type-1-0-3-ServiceToken"
         },
         "name": "PizzaType",
         "description": "Pizza type slot (veggie vs cheese).",
@@ -93,7 +93,7 @@
       ],
       "Properties": {
         "ServiceToken": {
-          "Fn::ImportValue": "cfn-lex-intent-1-0-1-ServiceToken"
+          "Fn::ImportValue": "cfn-lex-intent-1-0-3-ServiceToken"
         },
         "name": {
           "Ref": "IntentName"
