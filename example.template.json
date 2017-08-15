@@ -1,0 +1,239 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Also uses Custom::LexSlotType sample template version 1.0.1 as an external reference, to supply the slots for the Intent.",
+  "Parameters": {
+    "IntentName": {
+      "Type": "String",
+      "Default": "OrderPizza",
+      "Description": "Change this to do something that requires replacement of the resource, to test it."
+    },
+    "CrustTypeValue": {
+      "Type": "String",
+      "Default": "thin",
+      "Description": "Use this to change a slot value that the intent depends on. Good for testing what happens when a resource that the intent explicitly depends on is updated, propagating that to the resource. None of the actual params of the Intent change, invoking the NoUpdate callback in the SDKAlias code imlpementation of the resource."
+    },
+    "IntentDescription": {
+      "Type": "String",
+      "Default": "Order a pizza from a local pizzeria.",
+      "Description": "Change this for a non-replacement-required change to the intent, for testing."
+    }
+  },
+  "Resources": {
+    "PizzaSauceTypeSlot": {
+      "Type": "Custom::LexSlotType",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::ImportValue": "cfn-lex-slot-type-1-0-1-ServiceToken"
+        },
+        "name": "PizzaSauceType",
+        "description": "Pizza sauce type slot (normal vs white pie)",
+        "enumerationValues": [
+          {
+            "value": "red"
+          },
+          {
+            "value": "white"
+          }
+        ]
+      }
+    },
+    "PizzaCrustTypeSlot": {
+      "Type": "Custom::LexSlotType",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::ImportValue": "cfn-lex-slot-type-1-0-1-ServiceToken"
+        },
+        "name": "PizzaCrustType",
+        "description": "Pizza crust type slot.",
+        "enumerationValues": [
+          {
+            "value": {
+              "Ref": "CrustTypeValue"
+            }
+          },
+          {
+            "value": "thick"
+          }
+        ]
+      }
+    },
+    "PizzaTypeSlot": {
+      "Type": "Custom::LexSlotType",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::ImportValue": "cfn-lex-slot-type-1-0-1-ServiceToken"
+        },
+        "name": "PizzaType",
+        "description": "Pizza type slot (veggie vs cheese).",
+        "enumerationValues": [
+          {
+            "value": "veg"
+          },
+          {
+            "value": "veggie"
+          },
+          {
+            "value": "vegetable"
+          },
+          {
+            "value": "cheese"
+          },
+          {
+            "value": "plain"
+          }
+        ]
+      }
+    },
+    "OrderPizza": {
+      "Type": "Custom::LexIntent",
+      "DependsOn": [
+        "PizzaTypeSlot",
+        "PizzaCrustTypeSlot",
+        "PizzaSauceTypeSlot"
+      ],
+      "Properties": {
+        "ServiceToken": {
+          "Fn::ImportValue": "cfn-lex-intent-1-0-1-ServiceToken"
+        },
+        "name": {
+          "Ref": "IntentName"
+        },
+        "confirmationPrompt": {
+          "maxAttempts": 1,
+          "messages": [
+            {
+              "content": "Should I order  your {Crust} crust {Type} pizza with {Sauce} sauce?",
+              "contentType": "PlainText"
+            }
+          ]
+        },
+        "description": {
+          "Ref": "IntentDescription"
+        },
+        "fulfillmentActivity": {
+          "type": "ReturnIntent"
+        },
+        "rejectionStatement": {
+          "messages": [
+            {
+              "content": "Ok, I'll cancel your order.",
+              "contentType": "PlainText"
+            },
+            {
+              "content": "I cancelled your order.",
+              "contentType": "PlainText"
+            }
+          ]
+        },
+        "sampleUtterances": [
+          "Order me a pizza.",
+          "Order me a {Type} pizza.",
+          "I want a {Crust} crust {Type} pizza",
+          "I want a {Crust} crust {Type} pizza with {Sauce} sauce."
+        ],
+        "slots": [
+          {
+            "name": "Type",
+            "description": "The type of pizza to order.",
+            "priority": 1,
+            "sampleUtterances": [
+              "Get me a {Type} pizza.",
+              "A {Type} pizza please.",
+              "I'd like a {Type} pizza."
+            ],
+            "slotConstraint": "Required",
+            "slotType": "PizzaType",
+            "slotTypeVersion": "$LATEST",
+            "valueElicitationPrompt": {
+              "maxAttempts": 1,
+              "messages": [
+                {
+                  "content": "What type of pizza would you like?",
+                  "contentType": "PlainText"
+                },
+                {
+                  "content": "Vegie or cheese pizza?",
+                  "contentType": "PlainText"
+                },
+                {
+                  "content": "I can get you a vegie or a cheese pizza.",
+                  "contentType": "PlainText"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Crust",
+            "description": "The type of pizza crust to order.",
+            "priority": 2,
+            "sampleUtterances": [
+              "Make it a {Crust} crust.",
+              "I'd like a {Crust} crust."
+            ],
+            "slotConstraint": "Required",
+            "slotType": "PizzaCrustType",
+            "slotTypeVersion": "$LATEST",
+            "valueElicitationPrompt": {
+              "maxAttempts": 1,
+              "messages": [
+                {
+                  "content": "What type of crust would you like?",
+                  "contentType": "PlainText"
+                },
+                {
+                  "content": "Thick or thin crust?",
+                  "contentType": "PlainText"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Sauce",
+            "description": "The type of sauce to use on the pizza.",
+            "priority": 3,
+            "sampleUtterances": [
+              "Make it {Sauce} sauce.",
+              "I'd like {Sauce} sauce."
+            ],
+            "slotConstraint": "Required",
+            "slotType": "PizzaSauceType",
+            "slotTypeVersion": "$LATEST",
+            "valueElicitationPrompt": {
+              "maxAttempts": 1,
+              "messages": [
+                {
+                  "content": "White or red sauce?",
+                  "contentType": "PlainText"
+                },
+                {
+                  "content": "Garlic or tomato sauce?",
+                  "contentType": "PlainText"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "OrderPizzaIntentChecksum": {
+      "Description": "The checksum of the Lex intent for this stack.",
+      "Value": {
+        "Fn::GetAtt": [
+          "OrderPizza",
+          "checksum"
+        ]
+      }
+    },
+    "OrderPizzaIntentVersion": {
+      "Description": "The version of the Lex slot for this stack.",
+      "Value": {
+        "Fn::GetAtt": [
+          "OrderPizza",
+          "version"
+        ]
+      }
+    }
+  }
+}
